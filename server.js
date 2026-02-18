@@ -197,8 +197,9 @@ await resend.emails.send({
         `Order notes: ${order.confetti_note || "(none)"}\n\n` +
         `Please: (1) create packing slip/checklist (2) draft customer confirmation message (3) mark Ready to Ship.`;
 
-      await runOpenClaw(msg);
-      console.log("✅ PAID + OpenClaw triggered:", order.id, txHash);
+            // await runOpenClaw(msg);
+      console.log("✅ PAID (notified):", order.id, txHash);
+
     }
   } catch (e) {
     console.error("webhook error:", e);

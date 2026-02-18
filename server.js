@@ -9,7 +9,7 @@ const app = express();
 app.use(bodyParser.json({ limit: "2mb" }));
 
 app.use(express.urlencoded({ extended: true }));
-
+app.get("/webhooks/alchemy", (req, res) => res.status(200).send("ok"));
 app.get("/", (req, res) => {
   res.send(`
     <html>

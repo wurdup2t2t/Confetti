@@ -1,3 +1,5 @@
+import { Resend } from "resend";
+const resend = new Resend(process.env.RESEND_API_KEY);
 import express from "express";
 import bodyParser from "body-parser";
 import { nanoid } from "nanoid";

@@ -163,6 +163,26 @@ app.post("/webhooks/alchemy", async (req, res) => {
       order.payment = { amount, from, to, token, txHash, receivedAt: new Date().toISOString() };
       saveOrders(orders);
 
+      order.status = "PAID";
+order.payment = { txHash };
+saveOrders(orders);
+
+// 🔔 EMAIL NOTIFICATION
+await resend.emails.send({
+  from: "Confetti <onboarding@resend.dev>",
+  to: "wurdup2t2t@yahoo.com",
+  subject: `🎉 Confetti Order Paid: ${order.id}`,
+  html: `
+    <h2>Payment Received</h2>
+    <p><b>Order ID:</b> ${order.id}</p>
+    <p><b>Amount:</b> ${order.price} USDC</p>
+    <p><b>TX:</b> ${txHash}</p>
+    <h3>Shipping:</h3>
+    <pre>${JSON.stringify(order.shipping, null, 2)}</pre>
+  `
+});
+
+      
       const msg =
         `CONFETTI ORDER PAID ✅\n` +
         `Order: ${order.id}\n` +

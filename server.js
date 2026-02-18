@@ -8,6 +8,67 @@ import path from "path";
 const app = express();
 app.use(bodyParser.json({ limit: "2mb" }));
 
+app.use(express.urlencoded({ extended: true }));
+
+app.get("/", (req, res) => {
+  res.send(`
+    <html>
+      <body style="font-family: system-ui; max-width: 520px; margin: 40px auto;">
+        <h1>Confetti Order</h1>
+        <p>Fill shipping info, then you'll get payment instructions (19.99 USDC on Base).</p>
+        <form method="POST" action="/order/form">
+          <input name="name" placeholder="Full Name" required style="width:100%;padding:10px;margin:6px 0;" />
+          <input name="email" placeholder="Email (optional)" style="width:100%;padding:10px;margin:6px 0;" />
+          <input name="address1" placeholder="Address Line 1" required style="width:100%;padding:10px;margin:6px 0;" />
+          <input name="address2" placeholder="Address Line 2" style="width:100%;padding:10px;margin:6px 0;" />
+          <input name="city" placeholder="City" required style="width:100%;padding:10px;margin:6px 0;" />
+          <input name="state" placeholder="State" required style="width:100%;padding:10px;margin:6px 0;" />
+          <input name="zip" placeholder="ZIP" required style="width:100%;padding:10px;margin:6px 0;" />
+          <input name="country" placeholder="Country" value="US" required style="width:100%;padding:10px;margin:6px 0;" />
+          <textarea name="confetti_note" placeholder="Confetti note (optional)" style="width:100%;padding:10px;margin:6px 0;height:90px;"></textarea>
+          <button type="submit" style="padding:12px 16px;margin-top:10px;">Create Order</button>
+        </form>
+      </body>
+    </html>
+  `);
+});
+
+app.post("/order/form", (req, res) => {
+  const { name, email, address1, address2, city, state, zip, country, confetti_note } = req.body || {};
+  if (!name || !address1 || !city || !state || !zip || !country) {
+    return res.status(400).send("Missing required shipping fields.");
+  }
+
+  // Reuse your existing /order/create logic by calling it directly:
+  // (If you prefer, you can copy the create-order block here.)
+  const id = nanoid(10);
+  const orders = loadOrders();
+  orders[id] = {
+    id,
+    status: "AWAITING_PAYMENT",
+    createdAt: new Date().toISOString(),
+    price: PRICE,
+    receiver: RECEIVER,
+    shipping: { name, email, address1, address2, city, state, zip, country },
+    confetti_note: confetti_note || "",
+    payment: null,
+  };
+  saveOrders(orders);
+
+  res.send(`
+    <html>
+      <body style="font-family: system-ui; max-width: 520px; margin: 40px auto;">
+        <h2>Order Created ✅</h2>
+        <p><b>Order ID:</b> ${id}</p>
+        <p>Send exactly <b>${PRICE} USDC</b> on <b>Base</b> to:</p>
+        <code style="display:block;padding:12px;background:#f4f4f4;border-radius:8px;">${RECEIVER}</code>
+        <p>Once payment confirms, your order will process automatically.</p>
+      </body>
+    </html>
+  `);
+});
+
+
 const PORT = Number(process.env.PORT || "8787");
 const OPENCLAW_BIN = process.env.OPENCLAW_BIN || "openclaw";
 

@@ -12,7 +12,8 @@
   "dependencies": {
     "body-parser": "^2.2.2",
     "express": "^5.2.1",
-    "nanoid": "^5.1.6"
+    "nanoid": "^5.1.6",
+    "resend": "^6.9.2"
   },
   "type": "module"
 }

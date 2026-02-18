@@ -1,0 +1,21 @@
+{
+  "arf_ZrgQ5X": {
+    "id": "arf_ZrgQ5X",
+    "status": "AWAITING_PAYMENT",
+    "createdAt": "2026-02-18T17:07:24.435Z",
+    "price": 19.99,
+    "receiver": "0xc6ec88dd8f4a151454d5534330eb7f74effa6754",
+    "shipping": {
+      "name": "Test Person",
+      "email": "test@example.com",
+      "address1": "123 Main St",
+      "address2": "",
+      "city": "Fenton",
+      "state": "MI",
+      "zip": "48430",
+      "country": "US"
+    },
+    "confetti_note": "Test order",
+    "payment": null
+  }
+}
